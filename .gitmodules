@@ -1,0 +1,3 @@
+[submodule "cg_utils"]
+	path = cg_utils
+	url = git@github.com:tanerius/cg_utils.git
