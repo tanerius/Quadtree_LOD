@@ -1,208 +1,144 @@
-#ifdef GL3
-    #include <OpenGL/gl3.h>
-#endif
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <cstdio>
-#include <cstdlib>
-#include "linmath.hpp"
 
+// Define some of the global variables we're using for this sample
+GLuint program;
+GLuint vao;
 
-
-static const struct
-{
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
-};
-static const char* vertex_shader_text =
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
-"}\n";
-
-static const char* fragment_shader_text =
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
-"}\n";
-
-// A simple callback to print errors if/when they happen
-void error_callback(int error, const char* description)
-{
-    fprintf(stderr, "Error: %s\n", description);
+// This is the callback we'll be registering with GLFW for errors.
+// It'll just print out the error to the STDERR stream.
+void error_callback(int error, const char* description) {
+  fputs(description, stderr);
 }
 
-// A Simple callback for keypresses
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-    {
-        // Set the 'window should close' flag
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
+// This is the callback we'll be registering with GLFW for keyboard handling.
+// The only thing we're doing here is setting up the window to close when we press ESC
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  {
+    glfwSetWindowShouldClose(window, GL_TRUE);
+  }
 }
 
-static void window_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
+int main() {
+  // Initialize GLFW, and if it fails to initialize for any reason, print it out to STDERR.
+  if (!glfwInit()) {
+    fprintf(stderr, "Failed initialize GLFW.");
+    exit(EXIT_FAILURE);
+  }
 
+  // Set the error callback, as mentioned above.
+  glfwSetErrorCallback(error_callback);
 
+  // Set up OpenGL options.
+  // Use OpenGL verion 4.1,
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  // GLFW_OPENGL_FORWARD_COMPAT specifies whether the OpenGL context should be forward-compatible, i.e. one where all functionality deprecated in the requested version of OpenGL is removed.
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  // Indicate we only want the newest core profile, rather than using backwards compatible and deprecated features.
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  // Make the window resize-able.
+  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
+  // Create a window to put our stuff in.
+  GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
 
-
-
-
-
-void opengl2(){
-    GLFWwindow* window;
-    
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
-
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-
-    glfwSetKeyCallback(window, key_callback);
-    glfwMakeContextCurrent(window);
-    printf("INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
-    glfwSwapInterval(1);
-    glfwSetWindowSizeCallback(window, window_size_callback);
-
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(float) * 5, (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(float) * 5, (void*) (sizeof(float) * 2));
-
-    while (!glfwWindowShouldClose(window))
-    {
-        float ratio;
-        int width, height;
-        mat4x4 m, p, mvp;
-        glfwGetFramebufferSize(window, &width, &height);
-        ratio = width / (float) height;
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float) glfwGetTime());
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mat4x4_mul(mvp, p, m);
-        glUseProgram(program);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-    glfwDestroyWindow(window);
+  // If the window fails to be created, print out the error, clean up GLFW and exit the program.
+  if(!window) {
+    fprintf(stderr, "Failed to create GLFW window.");
     glfwTerminate();
-}
+    exit(EXIT_FAILURE);
+  }
 
+  // Use the window as the current context (everything that's drawn will be place in this window).
+  glfwMakeContextCurrent(window);
 
+  // Set the keyboard callback so that when we press ESC, it knows what to do.
+  glfwSetKeyCallback(window, key_callback);
 
+  printf("OpenGL version supported by this platform (%s): \n", glGetString(GL_VERSION));
 
+  // Makes sure all extensions will be exposed in GLEW and initialize GLEW.
+  glewExperimental = GL_TRUE;
+  glewInit();
 
+  // Shaders is the next part of our program. Notice that we use version 410 core. This has to match our version of OpenGL we are using, which is the core profile in version 4.1, thus 410 core.
 
+  // Vertex shader source code. This draws the vertices in our window. We have 3 vertices since we're drawing an triangle.
+  // Each vertex is represented by a vector of size 4 (x, y, z, w) coordinates.
+  static const char * vs_source[] =
+  {
+      "#version 410 core                                                 \n"
+      "                                                                  \n"
+      "void main(void)                                                   \n"
+      "{                                                                 \n"
+      "    const vec4 vertices[] = vec4[](vec4( 0.25, -0.25, 0.5, 1.0),  \n"
+      "                                   vec4(-0.25, -0.25, 0.5, 1.0),  \n"
+      "                                   vec4( 0.25,  0.25, 0.5, 1.0)); \n"
+      "                                                                  \n"
+      "    gl_Position = vertices[gl_VertexID];                          \n"
+      "}                                                                 \n"
+  };
 
+  // Fragment shader source code. This determines the colors in the fragment generated in the shader pipeline. In this case, it colors the inside of our triangle specified by our vertex shader.
+  static const char * fs_source[] =
+  {
+      "#version 410 core                                                 \n"
+      "                                                                  \n"
+      "out vec4 color;                                                   \n"
+      "                                                                  \n"
+      "void main(void)                                                   \n"
+      "{                                                                 \n"
+      "    color = vec4(0.0, 0.8, 1.0, 1.0);                             \n"
+      "}                                                                 \n"
+  };
 
+  // This next section we'll generate the OpenGL program and attach the shaders to it so that we can render our triangle.
+  program = glCreateProgram();
 
+  // We create a shader with our fragment shader source code and compile it.
+  GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fs, 1, fs_source, NULL);
+  glCompileShader(fs);
 
+  // We create a shader with our vertex shader source code and compile it.
+  GLuint vs = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vs, 1, vs_source, NULL);
+  glCompileShader(vs);
 
-void opengl4()
-{
-    int CurrentWidth = 800;
-    int CurrentHeight = 600;
+  // We'll attach our two compiled shaders to the OpenGL program.
+  glAttachShader(program, vs);
+  glAttachShader(program, fs);
 
-    GLFWwindow* window;
+  glLinkProgram(program);
 
-    window = glfwCreateWindow(CurrentWidth, CurrentHeight, "Simple example - OpenGL 4", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
+  // Generate vertex arrays for our program. More explanation on this will come in the future.
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
 
-    glfwSetKeyCallback(window, key_callback);
-    glfwMakeContextCurrent(window);
-    printf("INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
-    glfwSwapInterval(1);
-    glfwSetWindowSizeCallback(window, window_size_callback);
+  // We'll specify that we want to use this program that we've attached the shaders to.
+  glUseProgram(program);
 
-    // OpenGL inits 
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  // This is our render loop. As long as our window remains open (ESC is not pressed), we'll continue to render things.
+  while(!glfwWindowShouldClose(window))
+  {
+    // Set up our green background color
+    static const GLfloat green[] = { 0.0f, 0.25f, 0.0f, 1.0f };
+    // Clear the entire buffer with our green color (sets the background to be green).
+    glClearBufferfv(GL_COLOR, 0, green);
 
-    GLuint VertexArrayID;
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
-    
+    // Draw our triangles
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    while (!glfwWindowShouldClose(window))
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Swap the buffers so that what we drew will appear on the screen.
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+  }
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
-}
-
-
-int main(int argc, char** argv)
-{
-    
-
-    glfwSetErrorCallback(error_callback);
-    if (!glfwInit())
-        exit(EXIT_FAILURE);
-
-
-#ifdef GL3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    opengl4();
-#else
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    opengl2();
-#endif
-
-    exit(EXIT_SUCCESS);
+  // Program clean up when the window gets closed.
+  glDeleteVertexArrays(1, &vao);
+  glDeleteProgram(program);
 }

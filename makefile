@@ -1,24 +1,32 @@
-# Declare a variable for the compliler which we are going to use
-CXX=g++
+# OBJS specifies which files to compile as part of the project
+OBJS = main_gl4.cpp
 
-# Declare another variable with the flags which we are going to use
-CXXFLAGS_MAC=-g -Wall -std=c++11 -framework OpenGl -lglfw3 -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+OUTPUTDIR = build
 
-OBJDIR=build
+# CC specifies which compiler we're using
+CC = g++
 
-default: testing
+# INCLUDE_PATHS specifies the additional include paths we'll need
+INCLUDE_PATHS = -I/usr/local/include -I/opt/X11/include
 
-opengl4: testing4
+# LIBRARY_PATHS specifies the additional library paths we'll need
+LIBRARY_PATHS = -L/usr/local/lib -I/opt/X11/lib
 
-testing: clean init linmath.hpp
-	$(CXX) $(CXXFLAGS_MAC) main.cpp -o $(OBJDIR)/quadtree
+# COMPILER_FLAGS specifies the additional compilation options we're using
+# -w suppresses all warnings
+COMPILER_FLAGS = -Wall
 
-testing4: clean init linmath.hpp
-	$(CXX) $(CXXFLAGS_MAC) -DGL3 main_gl4.cpp -o $(OBJDIR)/quadtree_gl4
+# LINKER_FLAGS specifies the libraries we're linking against
+# Cocoa, IOKit, and CoreVideo are needed for static GLFW3.
+LINKER_FLAGS = -framework OpenGL -lglfw3 -lglew
 
+# OBJ_NAME specifies the name of our exectuable
+OBJ_NAME = main
 
-init: 
-	- mkdir -p $(OBJDIR)
+#This is the target that compiles our executable
+all : clean $(OBJS)
+	$(CC) $(OBJS) $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/$(OBJ_NAME)
 
 clean:
-	- rm -rf $(OBJDIR)
+	- rm -rf $(OUTPUTDIR)
+	- mkdir -p $(OUTPUTDIR)
