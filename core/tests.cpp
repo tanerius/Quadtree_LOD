@@ -1,10 +1,14 @@
 #include "cgdisplay.hpp"
+#include "cgrawmodel.hpp"
 
 int main()
 {
     CGCore::DisplayManager* Display = new CGCore::DisplayManager();
     Display->WriteDisplay("Hello from display manager! \n");
     Display->GetInfo();
+
+
+
     Display->CreateDisplay();
     while(!Display->CloseRequested())
     {

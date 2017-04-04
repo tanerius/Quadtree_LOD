@@ -1,5 +1,5 @@
 # OBJS specifies which files to compile as part of the project
-OBJS = cgdisplay
+OBJS = tests
 
 OUTPUTDIR = build
 
@@ -25,10 +25,15 @@ OBJ_NAME = cgdisplay
 
 #This is the target that compiles our executable
 all : clean $(OBJS)
-	
+
+tests: cgdisplay rawmodel
+	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o $(OUTPUTDIR)/cgrawmodel.o
+
 cgdisplay : cgdisplay.hpp
-	$(CC) cgdisplay.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) -c $(LINKER_FLAGS) -o $(OUTPUTDIR)/cgdisplay.o
-	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o
+	$(CC) cgdisplay.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgdisplay.o
+
+rawmodel : cgrawmodel.hpp
+	$(CC) cgrawmodel.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgrawmodel.o
 
 clean:
 	- rm -rf $(OUTPUTDIR)

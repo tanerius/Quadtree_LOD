@@ -13,7 +13,7 @@ namespace CGCore
         private:
             const int DisplayWidth = 1280;
             const int DisplayHeight = 720;
-            const int MaxFps = 120;
+            // const int MaxFps = 120;
 
             GLFWwindow* GLFWWindowPtr = nullptr; // will hold our window pointer
 
