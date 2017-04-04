@@ -1,5 +1,6 @@
 #ifndef CG_RAW_MODEL_HPP
 #define CG_RAW_MODEL_HPP
+#include <GL/glew.h>
 
 namespace CGCore
 {
@@ -7,7 +8,7 @@ namespace CGCore
     class RawModel
     {
         private:
-            int VaoID;
+            GLuint VaoID;
             int VertexCount;
 
             // prevent default construction

@@ -32,8 +32,12 @@ tests: cgdisplay rawmodel
 cgdisplay : cgdisplay.hpp
 	$(CC) cgdisplay.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgdisplay.o
 
+loader : rawmodel.hpp cgloader.hpp 
+	$(CC) cgloader.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgloader.o
+
 rawmodel : cgrawmodel.hpp
 	$(CC) cgrawmodel.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgrawmodel.o
+
 
 clean:
 	- rm -rf $(OUTPUTDIR)

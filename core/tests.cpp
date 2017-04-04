@@ -1,5 +1,6 @@
 #include "cgdisplay.hpp"
 #include "cgrawmodel.hpp"
+#include "cgloader.hpp"
 
 int main()
 {

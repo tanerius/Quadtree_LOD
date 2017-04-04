@@ -85,5 +85,5 @@ void CGCore::DisplayManager::UpdateDisplay()
 
 void CGCore::DisplayManager::WriteDisplay(const char* Msg)
 {
-    printf("Log: %s", Msg);
+    printf("Log (%lu b): %s", sizeof(GLfloat), Msg);
 }
