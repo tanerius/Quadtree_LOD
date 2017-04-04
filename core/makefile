@@ -28,7 +28,7 @@ all : clean $(OBJS)
 	
 cgdisplay : cgdisplay.hpp
 	$(CC) cgdisplay.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) -c $(LINKER_FLAGS) -o $(OUTPUTDIR)/cgdisplay.o
-	$(CC) test_cgdisplay.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/cgdisplay $(OUTPUTDIR)/cgdisplay.o
+	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o
 
 clean:
 	- rm -rf $(OUTPUTDIR)
