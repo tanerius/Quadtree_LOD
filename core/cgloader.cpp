@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <cstdio>
 #include <cstdlib>
+#include <vector>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -10,13 +11,18 @@
 
 void CGCore::Loader::CleanUp()
 {
-    for(GLint OneVBO : VBOContainer) {
-        glDeleteBuffers(1, &OneVBO);
+    /*
+    for(GLint n : VBOContainer) {
+        GLint* OneVBO = new GLint;
+        *OneVBO = n;
+        glDeleteBuffers(1, OneVBO);
     }
     
-    for(GLint OneVAO : VAOContainer) {
+    for(GLint n : VAOContainer) {
+        GLint OneVAO = n;
         glDeleteVertexArrays(1, &OneVAO);
     }
+    */
 
     VBOContainer.clear();
     VAOContainer.clear();
@@ -31,12 +37,13 @@ GLuint CGCore::Loader::CreateVAO()
     return VaoID;
 }
 
-RawModel CGCore::Loader::LoadToVAO(GLfloat Positions[], GLuint ArraySize)
+CGCore::RawModel CGCore::Loader::LoadToVAO(GLfloat Positions[], GLuint ArraySize)
 {
     GLuint VaoID = CreateVAO();
     StoreDataInAttrList(0, Positions, ArraySize);
     UnbindVAO();
-    return RawModel(VaoID, ArraySize / 3);
+    CGCore::RawModel ret = CGCore::RawModel(VaoID, ArraySize / 3);
+    return ret;
 }
 
 void CGCore::Loader::StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize)

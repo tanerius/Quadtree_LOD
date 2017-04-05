@@ -28,7 +28,7 @@ namespace CGCore
             void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
         public:
-            void CleanUp() {}; // TODO: implement this to clean up vaos and vbos
+            void CleanUp(); // TODO: implement this to clean up vaos and vbos
             RawModel LoadToVAO(GLfloat Positions[], GLuint ArraySize);
             
     };
