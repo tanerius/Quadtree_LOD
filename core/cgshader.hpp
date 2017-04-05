@@ -10,7 +10,7 @@ namespace CGCore
             int VertexShaderID;
             int FragmentShaderID;
 
-            std::string readFile(const char *FileName);
+            std::string ReadFile(const char *FileName);
         protected:
             virtual int LoadShader(const char* FileName, int ShaderType);
 
