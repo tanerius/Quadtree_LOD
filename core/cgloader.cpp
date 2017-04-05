@@ -7,23 +7,22 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-// TODO: Keep VAOs and VBOs in a list for proper memory management 
+void CGCore::Loader::BindIndecesBuffer(int indices[])
+{
+    
+}
 
 void CGCore::Loader::CleanUp()
 {
-    /*
-    for(GLint n : VBOContainer) {
-        GLint* OneVBO = new GLint;
-        *OneVBO = n;
-        glDeleteBuffers(1, OneVBO);
+    
+    for(GLuint n : VBOContainer) {
+        glDeleteBuffers(1, &n);
     }
     
-    for(GLint n : VAOContainer) {
-        GLint OneVAO = n;
-        glDeleteVertexArrays(1, &OneVAO);
+    for(GLuint n : VAOContainer) {
+        glDeleteVertexArrays(1, &n);
     }
-    */
-
+    
     VBOContainer.clear();
     VAOContainer.clear();
 }
@@ -53,7 +52,7 @@ void CGCore::Loader::StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLui
     VBOContainer.push_back(VboID);
     glBindBuffer(GL_ARRAY_BUFFER, VboID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*DataSize, Data, GL_STATIC_DRAW);
-    glVertexAttribPointer(AttrNumber, 3, GL_FLOAT, GL_FALSE, 0, 0); // write to VAO
+    glVertexAttribPointer(AttrNumber, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0); // write to VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind current VBO
 }
 

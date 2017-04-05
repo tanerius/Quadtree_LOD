@@ -18,7 +18,7 @@ COMPILER_FLAGS = -Wall -std=c++11
 
 # LINKER_FLAGS specifies the libraries we're linking against
 # Cocoa, IOKit, and CoreVideo are needed for static GLFW3.
-LINKER_FLAGS = -framework OpenGL -lglfw -lglew
+LINKER_FLAGS = -framework OpenGL -lglfw3 -lglew
 
 # OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = cgdisplay

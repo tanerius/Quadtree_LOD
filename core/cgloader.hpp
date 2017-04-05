@@ -24,6 +24,7 @@ namespace CGCore
             std::vector<GLuint> VAOContainer;
             std::vector<GLuint> VBOContainer;
             // Members
+            void BindIndecesBuffer(int indices[]);
             GLuint CreateVAO(); // returns a new VaoID
             void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
