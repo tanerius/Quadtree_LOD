@@ -1,8 +1,10 @@
 #ifndef CG_LOADER_HPP
 #define CG_LOADER_HPP
+#include <vector>
 #include <GL/glew.h>
 
 class RawModel;
+
 
 namespace CGCore
 {
@@ -18,6 +20,10 @@ namespace CGCore
     class Loader
     {
         private:
+            // Properties
+            std::vector<GLuint> VAOContainer;
+            std::vector<GLuint> VBOContainer;
+            // Members
             GLuint CreateVAO(); // returns a new VaoID
             void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
