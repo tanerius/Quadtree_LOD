@@ -7,9 +7,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-void CGCore::Loader::BindIndecesBuffer(int indices[])
+/*
+*
+* VBO optimization to make sure repeating vectors don't use up space
+*
+*/
+void CGCore::Loader::BindIndicesBufferVBO(GLuint Indices[], GLuint ArraySize)
 {
-    
+    GLuint VboID; 
+    glGenBuffers(1,&VboID);
+    VBOContainer.push_back(VboID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLint)*ArraySize, Indices, GL_STATIC_DRAW);
 }
 
 void CGCore::Loader::CleanUp()
@@ -36,12 +45,17 @@ GLuint CGCore::Loader::CreateVAO()
     return VaoID;
 }
 
-CGCore::RawModel CGCore::Loader::LoadToVAO(GLfloat Positions[], GLuint ArraySize)
+CGCore::RawModel CGCore::Loader::LoadToVAO
+(
+    GLfloat Positions[], GLuint PosArrySize,
+    GLuint Indices[], GLuint IndArrySize
+)
 {
     GLuint VaoID = CreateVAO();
-    StoreDataInAttrList(0, Positions, ArraySize);
+    BindIndicesBufferVBO(Indices, IndArrySize); // Buffer Index - optimization
+    StoreDataInAttrList(0, Positions, PosArrySize);
     UnbindVAO();
-    CGCore::RawModel ret = CGCore::RawModel(VaoID, ArraySize / 3);
+    CGCore::RawModel ret = CGCore::RawModel(VaoID, IndArrySize);
     return ret;
 }
 

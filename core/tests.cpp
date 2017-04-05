@@ -15,18 +15,20 @@ int main()
     CGCore::Loader* LoaderObj = new CGCore::Loader();
     CGCore::Renderer* RendererObj = new CGCore::Renderer();
 
-    GLfloat TriVertices[] = {
+    GLfloat PossibleVertices[] = {
         // Left bottom triangle
-        -0.5f,  0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         // Right top triangle
-         0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+        -0.5f,  0.5f, 0.0f, // v0
+        -0.5f, -0.5f, 0.0f, // v1
+         0.5f, -0.5f, 0.0f, // v2
+         0.5f,  0.5f, 0.0f  // v3
     };
 
-    CGCore::RawModel ModelObj = LoaderObj->LoadToVAO(TriVertices, 18);
+    GLuint Indices[] = {
+        0, 1, 3,
+        3, 1, 2
+    };
+
+    CGCore::RawModel ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
 
     while(!Display->CloseRequested())
     {

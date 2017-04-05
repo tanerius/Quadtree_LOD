@@ -24,14 +24,13 @@ namespace CGCore
             std::vector<GLuint> VAOContainer;
             std::vector<GLuint> VBOContainer;
             // Members
-            void BindIndecesBuffer(int indices[]);
+            void BindIndicesBufferVBO(GLuint Indices[], GLuint ArraySize);
             GLuint CreateVAO(); // returns a new VaoID
             void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
         public:
             void CleanUp(); // TODO: implement this to clean up vaos and vbos
-            RawModel LoadToVAO(GLfloat Positions[], GLuint ArraySize);
-            
+            RawModel LoadToVAO(GLfloat Positions[], GLuint PosArrySize, GLuint Indices[], GLuint IndArrySize);
     };
 
 } 
