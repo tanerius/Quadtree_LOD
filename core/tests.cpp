@@ -1,5 +1,7 @@
 #include "cgdisplay.hpp"
 #include "cgrawmodel.hpp"
+#include "cgshader.hpp"
+#include "cgstaticshader.hpp"
 #include "cgloader.hpp"
 #include "cgrenderer.hpp"
 
@@ -14,6 +16,7 @@ int main()
 
     CGCore::Loader* LoaderObj = new CGCore::Loader();
     CGCore::Renderer* RendererObj = new CGCore::Renderer();
+    CGCore::StaticShader* StaticShaderObj = new CGCore::StaticShader();
 
     GLfloat PossibleVertices[] = {
         // Left bottom triangle
@@ -34,10 +37,13 @@ int main()
     {
         // Write game loop here
         RendererObj->Prepare();
+        StaticShaderObj->StartProgram();
         RendererObj->Render(ModelObj);
+        StaticShaderObj->StopProgram();
         Display->UpdateDisplay();
     }
 
+    StaticShaderObj->CleanUp();
     LoaderObj->CleanUp();
     Display->DestroyDisplay();
     delete Display;

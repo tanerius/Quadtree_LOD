@@ -40,10 +40,23 @@ CGCore::Shader::Shader(const char* VertexFile, const char* FragmentFile)
     int logLength;
     glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
     glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &logLength);
-    std::vector<char> programError( (logLength > 1) ? logLength : 1 );
-    glGetProgramInfoLog(ProgramID, logLength, NULL, &programError[0]);
-    std::cout << &programError[0] << std::endl;
-    BindAttributes();
+    char* err = nullptr;
+    if(logLength > 1)
+    {
+        err = (char*)malloc(sizeof(char)*logLength+1);
+        glGetProgramInfoLog(ProgramID, logLength, NULL, err);
+        std::cout << err << std::endl;
+        free(err);
+        err = nullptr;
+    }
+     
+    // BindAttributes(); // this is pure virtual don't call it from here
+    if( Result == GL_FALSE )
+    {
+        //std::cout << VertShaderError[0] << std::endl;
+        std::cout << "Cannot link shader program!" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 }
 
 void CGCore::Shader::StartProgram()
@@ -61,7 +74,7 @@ void CGCore::Shader::StopProgram()
 GLuint CGCore::Shader::LoadShader(const char* FileName, GLenum ShaderType)
 {
     // Read the shader
-    const char* ShaderCode = ReadFile(const char *FileName);
+    const char* ShaderCode = ReadFile(FileName);
     GLuint ShaderHandle = glCreateShader(ShaderType);
 
     GLint Result = GL_FALSE;
@@ -73,12 +86,21 @@ GLuint CGCore::Shader::LoadShader(const char* FileName, GLenum ShaderType)
     // Check shader
     glGetShaderiv(ShaderHandle, GL_COMPILE_STATUS, &Result);
     glGetShaderiv(ShaderHandle, GL_INFO_LOG_LENGTH, &LogLength);
-    VertShaderError = std::vector((LogLength > 1) ? LogLength : 1);
-    glGetShaderInfoLog(ShaderHandle, LogLength, NULL, &VertShaderError[0]);
+
+    char* err = nullptr;
+    if(LogLength > 1)
+    {
+        err = (char*)malloc(sizeof(char)*LogLength+1);
+        glGetShaderInfoLog(ShaderHandle, LogLength, NULL, err);
+        std::cout << err << std::endl;
+        free(err);
+        err = nullptr;
+    }
 
     if( Result == GL_FALSE )
     {
-        std::cout << VertShaderError[0] << std::endl;
+        //std::cout << VertShaderError[0] << std::endl;
+        std::cout << "Cannot compile shader!" << std::endl;
         exit(EXIT_FAILURE);
         return 0;
     }

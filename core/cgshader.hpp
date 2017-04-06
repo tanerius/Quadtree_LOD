@@ -6,17 +6,18 @@
 
 namespace CGCore
 {
+    // An abstract class representing a shader - can't be instantiated on its own
     class Shader
     {
         private:
             GLuint ProgramID;
             GLuint VertexShaderID;
             GLuint FragmentShaderID;
-            std::vector VertShaderError;
+            std::vector <char*> VertShaderError;
 
             const char* ReadFile(const char *FileName);
         protected:
-            virtual void BindAttributes();
+            virtual void BindAttributes() = 0; // PURE VIRTUAL !!!
             virtual GLuint LoadShader(const char* FileName, GLenum ShaderType);
         public:
             void BindAttribute(int Attrib, const GLchar* VarName);
