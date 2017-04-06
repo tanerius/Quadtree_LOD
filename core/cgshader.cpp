@@ -6,6 +6,24 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+void CGCore::Shader::BindAttribute(int Attrib, const GLchar* VarName)
+{
+    glBindAttribLocation(ProgramID, Attrib, VarName);
+}
+
+void CGCore::Shader::CleanUp()
+{
+    // Do some cleaning up of mem
+    // Stop program
+    StopProgram();
+    // detach and delete shaders
+    glDetachShader(ProgramID, VertexShaderID);
+    glDetachShader(ProgramID, FragmentShaderID);
+    glDeleteShader(VertexShaderID);
+    glDeleteShader(FragmentShaderID);
+    glDeleteProgram(ProgramID);
+}
+
 CGCore::Shader::Shader(const char* VertexFile, const char* FragmentFile)
 {
     VertexShaderID = LoadShader(VertexFile, GL_VERTEX_SHADER);
@@ -25,6 +43,19 @@ CGCore::Shader::Shader(const char* VertexFile, const char* FragmentFile)
     std::vector<char> programError( (logLength > 1) ? logLength : 1 );
     glGetProgramInfoLog(ProgramID, logLength, NULL, &programError[0]);
     std::cout << &programError[0] << std::endl;
+    BindAttributes();
+}
+
+void CGCore::Shader::StartProgram()
+{
+    // Start a shader program on the current rendering state
+    glUseProgram(ProgramID);
+}
+
+void CGCore::Shader::StopProgram()
+{
+    // Sto current shader program
+    glUseProgram(0);
 }
 
 GLuint CGCore::Shader::LoadShader(const char* FileName, GLenum ShaderType)

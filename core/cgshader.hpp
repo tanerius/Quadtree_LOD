@@ -19,7 +19,11 @@ namespace CGCore
             virtual void BindAttributes();
             virtual GLuint LoadShader(const char* FileName, GLenum ShaderType);
         public:
+            void BindAttribute(int Attrib, const GLchar* VarName);
+            void CleanUp();
             Shader(const char* VertexFile, const char* FragmentFile);
+            void StartProgram();
+            void StopProgram();
 
     };
 }
