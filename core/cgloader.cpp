@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <png.h> // Ability to read png files for textures
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -45,6 +46,8 @@ GLuint CGCore::Loader::CreateVAO()
     return VaoID;
 }
 
+
+ 
 CGCore::RawModel CGCore::Loader::LoadToVAO
 (
     GLfloat Positions[], GLuint PosArrySize,

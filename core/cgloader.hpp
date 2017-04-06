@@ -20,16 +20,17 @@ namespace CGCore
     class Loader
     {
         private:
-            // Properties
+            // containers to keep things clean
             std::vector<GLuint> VAOContainer;
             std::vector<GLuint> VBOContainer;
+            std::vector<GLubyte*> TextureContainer;
             // Members
             void BindIndicesBufferVBO(GLuint Indices[], GLuint ArraySize);
             GLuint CreateVAO(); // returns a new VaoID
             void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
         public:
-            void CleanUp(); // TODO: implement this to clean up vaos and vbos
+            void CleanUp(); 
             RawModel LoadToVAO(GLfloat Positions[], GLuint PosArrySize, GLuint Indices[], GLuint IndArrySize);
     };
 

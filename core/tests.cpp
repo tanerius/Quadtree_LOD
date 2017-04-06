@@ -16,9 +16,7 @@ int main()
 
     CGCore::Loader* LoaderObj = new CGCore::Loader();
     CGCore::Renderer* RendererObj = new CGCore::Renderer();
-
     Display->GetInfo();
-
     CGCore::StaticShader* StaticShaderObj = new CGCore::StaticShader();
 
     GLfloat PossibleVertices[] = {
