@@ -18,7 +18,7 @@ COMPILER_FLAGS = -Wall -std=c++11
 
 # LINKER_FLAGS specifies the libraries we're linking against
 # Cocoa, IOKit, and CoreVideo are needed for static GLFW3.
-LINKER_FLAGS = -framework OpenGL -lglfw3 -lglew
+LINKER_FLAGS = -framework OpenGL -lglfw -lglew
 
 # OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = cgdisplay
@@ -26,7 +26,7 @@ OBJ_NAME = cgdisplay
 #This is the target that compiles our executable
 all : clean $(OBJS)
 
-tests: cgdisplay rawmodel loader renderer
+tests: cgdisplay rawmodel loader renderer shader
 	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o $(OUTPUTDIR)/cgrawmodel.o $(OUTPUTDIR)/cgloader.o $(OUTPUTDIR)/cgrenderer.o 
 
 cgdisplay : cgdisplay.hpp
@@ -41,7 +41,8 @@ renderer : rawmodel cgrenderer.hpp
 rawmodel : cgrawmodel.hpp
 	$(CC) cgrawmodel.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgrawmodel.o
 
-
+shader : cgshader.hpp
+	$(CC) cgrawmodel.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgshader.o
 clean:
 	- rm -rf $(OUTPUTDIR)
 	- mkdir -p $(OUTPUTDIR)
