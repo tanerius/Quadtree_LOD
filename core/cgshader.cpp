@@ -27,7 +27,7 @@ void CGCore::Shader::CleanUp()
 CGCore::Shader::Shader(const char* VertexFile, const char* FragmentFile)
 {
     VertexShaderID = LoadShader(VertexFile, GL_VERTEX_SHADER);
-    FragmentShaderID = LoadShader(VertexFile, GL_FRAGMENT_SHADER);
+    FragmentShaderID = LoadShader(FragmentFile, GL_FRAGMENT_SHADER);
     // Linking a program
     ProgramID = glCreateProgram();
     glAttachShader(ProgramID, VertexShaderID);
