@@ -1,18 +1,25 @@
 #ifndef CG_SHADER_HPP
 #define CG_SHADER_HPP
 
+#include <vector>
+#include <GL/glew.h>
+
 namespace CGCore
 {
     class Shader
     {
         private:
-            int ProgramID;
-            int VertexShaderID;
-            int FragmentShaderID;
+            GLuint ProgramID;
+            GLuint VertexShaderID;
+            GLuint FragmentShaderID;
+            std::vector VertShaderError;
 
-            std::string ReadFile(const char *FileName);
+            const char* ReadFile(const char *FileName);
         protected:
-            virtual int LoadShader(const char* FileName, int ShaderType);
+            virtual void BindAttributes();
+            virtual GLuint LoadShader(const char* FileName, GLenum ShaderType);
+        public:
+            Shader(const char* VertexFile, const char* FragmentFile);
 
     };
 }

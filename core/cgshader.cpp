@@ -1,15 +1,61 @@
 #include "cgshader.hpp"
 #include <string>
+#include <vector>
 #include <iostream>
 #include <fstream>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
-
-int CGCore::Shader::LoadShader(const char* FileName, int ShaderType)
+CGCore::Shader::Shader(const char* VertexFile, const char* FragmentFile)
 {
-    return 0;
+    VertexShaderID = LoadShader(VertexFile, GL_VERTEX_SHADER);
+    FragmentShaderID = LoadShader(VertexFile, GL_FRAGMENT_SHADER);
+    // Linking a program
+    ProgramID = glCreateProgram();
+    glAttachShader(ProgramID, VertexShaderID);
+    glAttachShader(ProgramID, FragmentShaderID);
+    glLinkProgram(ProgramID);
+    glValidateProgram(ProgramID);
+
+    // Check that the program compiled and can work
+    GLint Result = GL_FALSE;
+    int logLength;
+    glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
+    glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &logLength);
+    std::vector<char> programError( (logLength > 1) ? logLength : 1 );
+    glGetProgramInfoLog(ProgramID, logLength, NULL, &programError[0]);
+    std::cout << &programError[0] << std::endl;
 }
 
-std::string CGCore::Shader::ReadFile(const char *FileName) {
+GLuint CGCore::Shader::LoadShader(const char* FileName, GLenum ShaderType)
+{
+    // Read the shader
+    const char* ShaderCode = ReadFile(const char *FileName);
+    GLuint ShaderHandle = glCreateShader(ShaderType);
+
+    GLint Result = GL_FALSE;
+    int LogLength;
+
+    // Compile the shader
+    glShaderSource(ShaderHandle, 1, &ShaderCode, NULL);
+    glCompileShader(ShaderHandle);
+    // Check shader
+    glGetShaderiv(ShaderHandle, GL_COMPILE_STATUS, &Result);
+    glGetShaderiv(ShaderHandle, GL_INFO_LOG_LENGTH, &LogLength);
+    VertShaderError = std::vector((LogLength > 1) ? LogLength : 1);
+    glGetShaderInfoLog(ShaderHandle, LogLength, NULL, &VertShaderError[0]);
+
+    if( Result == GL_FALSE )
+    {
+        std::cout << VertShaderError[0] << std::endl;
+        exit(EXIT_FAILURE);
+        return 0;
+    }
+    
+    return ShaderHandle;
+}
+
+const char* CGCore::Shader::ReadFile(const char *FileName) {
     std::string content;
     std::ifstream fileStream(FileName, std::ios::in);
 
@@ -25,5 +71,6 @@ std::string CGCore::Shader::ReadFile(const char *FileName) {
     }
 
     fileStream.close();
-    return content;
+
+    return content.c_str();
 }
