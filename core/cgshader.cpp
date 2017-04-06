@@ -92,6 +92,14 @@ GLuint CGCore::Shader::LoadShader(const char* FileName, GLenum ShaderType)
     {
         err = (char*)malloc(sizeof(char)*LogLength+1);
         glGetShaderInfoLog(ShaderHandle, LogLength, NULL, err);
+        if(ShaderType == GL_VERTEX_SHADER)
+        {
+            std::cout << "Vertex shader error:" << std::endl;
+        }
+        else
+        {
+            std::cout << "Fragment shader error:" << std::endl;
+        }
         std::cout << err << std::endl;
         free(err);
         err = nullptr;

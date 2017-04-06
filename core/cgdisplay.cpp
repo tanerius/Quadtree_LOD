@@ -73,7 +73,9 @@ void CGCore::DisplayManager::DestroyDisplay()
 
 void CGCore::DisplayManager::GetInfo()
 {
-    //printf("Supported GL version: %s \n",glGetString(GL_VERSION));
+    printf("GL Information:\n");
+    printf("Supported GL version: %s \n",glGetString(GL_VERSION));
+    printf("Supported shading lang: %s \n",glGetString (GL_SHADING_LANGUAGE_VERSION));
 }
 
 void CGCore::DisplayManager::UpdateDisplay()

@@ -10,12 +10,15 @@ int main()
 {
     CGCore::DisplayManager* Display = new CGCore::DisplayManager();
     Display->WriteDisplay("Hello from display manager! \n");
-    Display->GetInfo();
+    
 
     Display->CreateDisplay();
 
     CGCore::Loader* LoaderObj = new CGCore::Loader();
     CGCore::Renderer* RendererObj = new CGCore::Renderer();
+
+    Display->GetInfo();
+
     CGCore::StaticShader* StaticShaderObj = new CGCore::StaticShader();
 
     GLfloat PossibleVertices[] = {
@@ -32,6 +35,8 @@ int main()
     };
 
     CGCore::RawModel ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
+
+    
 
     while(!Display->CloseRequested())
     {
