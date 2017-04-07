@@ -1,3 +1,4 @@
+#include "cgtexturedmodel.hpp"
 #include "cgrenderer.hpp"
 #include "cgrawmodel.hpp"
 
@@ -10,8 +11,9 @@ void CGCore::Renderer::Prepare()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void CGCore::Renderer::Render(CGCore::RawModel* Model)
+void CGCore::Renderer::Render(CGCore::TexturedModel* TexturedModelObj)
 {
+    CGCore::RawModel* Model = TexturedModelObj->GetModel();
     glBindVertexArray(Model->GetVaoID());
     glEnableVertexAttribArray(0);
     // glDrawArrays(GL_TRIANGLES, 0, Model.GetVertexCount()); // Use this to draw directly given vertices

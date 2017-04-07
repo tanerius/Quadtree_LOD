@@ -18,7 +18,6 @@ namespace CGCore
             StaticShader();
             virtual ~StaticShader() {}
     };
-
 }
 
 #endif

@@ -1,5 +1,6 @@
 #ifndef CG_RAW_MODEL_HPP
 #define CG_RAW_MODEL_HPP
+
 #include <GL/glew.h>
 
 namespace CGCore

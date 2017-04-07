@@ -14,7 +14,7 @@ namespace CGCore
 
         public:
             void Prepare();
-            void Render(CGCore::RawModel* Model);
+            void Render(CGCore::TexturedModel* TexturedModelObj);
     };
 
 } 

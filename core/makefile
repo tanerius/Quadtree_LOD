@@ -26,8 +26,8 @@ OBJ_NAME = cgdisplay
 #This is the target that compiles our executable
 all : clean $(OBJS)
 
-tests: cgdisplay rawmodel loader renderer shader staticshader texture 
-	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o $(OUTPUTDIR)/cgrawmodel.o $(OUTPUTDIR)/cgloader.o $(OUTPUTDIR)/cgrenderer.o $(OUTPUTDIR)/cgshader.o $(OUTPUTDIR)/cgstaticshader.o $(OUTPUTDIR)/cgtexture.o 
+tests: cgdisplay rawmodel loader renderer shader staticshader texture texturedmodel
+	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o $(OUTPUTDIR)/cgrawmodel.o $(OUTPUTDIR)/cgloader.o $(OUTPUTDIR)/cgrenderer.o $(OUTPUTDIR)/cgshader.o $(OUTPUTDIR)/cgstaticshader.o $(OUTPUTDIR)/cgtexture.o $(OUTPUTDIR)/cgtexturedmodel.o
 
 cgdisplay : cgdisplay.hpp
 	$(CC) cgdisplay.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgdisplay.o
@@ -38,7 +38,7 @@ loader : rawmodel texture cgloader.hpp
 renderer : rawmodel cgrenderer.hpp 
 	$(CC) cgrenderer.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgrenderer.o
 
-texturedmodel : cgtexturedmodel.hpp
+texturedmodel : rawmodel texture cgtexturedmodel.hpp
 	$(CC) cgtexturedmodel.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgtexturedmodel.o
 
 rawmodel : cgrawmodel.hpp

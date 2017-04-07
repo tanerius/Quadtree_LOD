@@ -1,11 +1,13 @@
 #include "cgdisplay.hpp"
+#include "cgtexturedmodel.hpp"
 #include "cgrawmodel.hpp"
+#include "cgtexture.hpp"
 #include "cgshader.hpp"
 #include "cgstaticshader.hpp"
 #include "cgloader.hpp"
 #include "cgrenderer.hpp"
-#include "cgtexture.hpp"
-//#include "cgtexturedmodel.hpp"
+
+
 
 int main()
 {
@@ -35,14 +37,14 @@ int main()
 
     CGCore::RawModel* ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
     CGCore::Texture* TextureObj = new CGCore::Texture("../res/img_noalpha.png");
-    //CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
+    CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
 
     while(!Display->CloseRequested())
     {
         // Write game loop here
         RendererObj->Prepare();
         StaticShaderObj->StartProgram();
-        RendererObj->Render(ModelObj);
+        RendererObj->Render(TMObj);
         StaticShaderObj->StopProgram();
         Display->UpdateDisplay();
     }

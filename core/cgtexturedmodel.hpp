@@ -1,11 +1,12 @@
-#ifndef CG_RAW_MODEL_HPP
-#define CG_RAW_MODEL_HPP
+#ifndef CG_TEXTURED_MODEL_HPP
+#define CG_TEXTURED_MODEL_HPP
+
 #include <GL/glew.h>
 
 namespace CGCore
 {
-    class CGCore::RawModel;
-    class CGCore::Texture;
+    class RawModel;
+    class Texture;
 
     // This class stores a model in memory
     class TexturedModel
@@ -15,8 +16,8 @@ namespace CGCore
             CGCore::Texture* CurTexture = nullptr;
         public:
             TexturedModel(CGCore::RawModel* LpModel, CGCore::Texture* LpTexture);
-            CGCore::RawModel* GetModel() const { return CurRawModel; }
-            CGCore::Texture* GetTexture() const { return CurTexture; }
+            CGCore::RawModel* GetModel() const;
+            CGCore::Texture* GetTexture() const; 
     };
 
 } 
