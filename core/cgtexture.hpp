@@ -22,6 +22,7 @@ namespace CGCore
             void LoadTexture(const char* FileName);
         public:
             Texture(const char* PNGFileName); // Textures for now must be PNG
+            ~Texture();
             bool CheckHasAlpha() const { return HasAlpha; }
             int GetHeight() const { return Height; }
             int GetWidth() const { return Width; }

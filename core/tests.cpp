@@ -4,7 +4,8 @@
 #include "cgstaticshader.hpp"
 #include "cgloader.hpp"
 #include "cgrenderer.hpp"
-
+#include "cgtexture.hpp"
+#include "cgtexturedmodel.hpp"
 
 int main()
 {
@@ -32,9 +33,9 @@ int main()
         3, 1, 2
     };
 
-    CGCore::RawModel ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
-
-    
+    CGCore::RawModel* ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
+    CGCore::Texture* TextureObj = new CGCore::Texture("../res/img_noalpha.png");
+    CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
 
     while(!Display->CloseRequested())
     {
@@ -49,7 +50,12 @@ int main()
     StaticShaderObj->CleanUp();
     LoaderObj->CleanUp();
     Display->DestroyDisplay();
+    delete ModelObj;
+    delete TextureObj;
+    delete StaticShaderObj;
     delete Display;
+    delete LoaderObj;
+
     
     return 0;
 }

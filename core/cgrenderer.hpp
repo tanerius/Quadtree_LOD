@@ -1,11 +1,12 @@
 #ifndef CG_RENDERER_HPP
 #define CG_RENDERER_HPP
 
-class RawModel;
+
+
 namespace CGCore
 {
 
-    
+    class TexturedModel;
     // Renderer class 
     class Renderer
     {
@@ -13,7 +14,7 @@ namespace CGCore
 
         public:
             void Prepare();
-            void Render(RawModel Model);
+            void Render(CGCore::TexturedModel* Model);
     };
 
 } 

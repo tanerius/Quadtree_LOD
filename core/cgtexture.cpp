@@ -9,6 +9,16 @@ CGCore::Texture::Texture(const char* PNGFileName)
     LoadTexture(PNGFileName);
 }
 
+// Dtor
+CGCore::Texture::~Texture()
+{
+    if(TextureData != nullptr)
+    {
+        delete TextureData;
+        TextureData = nullptr;
+    }
+}
+
 bool CGCore::Texture::LoadPNG(const char* name, int& outWidth, int& outHeight, bool& outHasAlpha, GLubyte** outData) 
 {
     png_structp png_ptr;

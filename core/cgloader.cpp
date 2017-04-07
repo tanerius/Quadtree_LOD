@@ -1,5 +1,7 @@
 #include "cgrawmodel.hpp"
+#include "cgtexture.hpp"
 #include "cgloader.hpp"
+
 #include <assert.h>
 #include <cstdio>
 #include <cstdlib>
@@ -32,9 +34,16 @@ void CGCore::Loader::CleanUp()
     for(GLuint n : VAOContainer) {
         glDeleteVertexArrays(1, &n);
     }
+
+    for(CGCore::Texture* n : TextureContainer)
+    {
+        delete n;
+        n = nullptr;
+    }
     
     VBOContainer.clear();
     VAOContainer.clear();
+    TextureContainer.clear();
 }
 
 GLuint CGCore::Loader::CreateVAO()
@@ -46,9 +55,14 @@ GLuint CGCore::Loader::CreateVAO()
     return VaoID;
 }
 
-
+CGCore::Texture* CGCore::Loader::LoadTexture(const char* FileName)
+{
+    CGCore::Texture* NewTexture = new CGCore::Texture(FileName);
+    TextureContainer.push_back(NewTexture);
+    return NewTexture;
+}
  
-CGCore::RawModel CGCore::Loader::LoadToVAO
+CGCore::RawModel* CGCore::Loader::LoadToVAO
 (
     GLfloat Positions[], GLuint PosArrySize,
     GLuint Indices[], GLuint IndArrySize
@@ -58,7 +72,7 @@ CGCore::RawModel CGCore::Loader::LoadToVAO
     BindIndicesBufferVBO(Indices, IndArrySize); // Buffer Index - optimization
     StoreDataInAttrList(0, Positions, PosArrySize);
     UnbindVAO();
-    CGCore::RawModel ret = CGCore::RawModel(VaoID, IndArrySize);
+    CGCore::RawModel* ret = new CGCore::RawModel(VaoID, IndArrySize);
     return ret;
 }
 
