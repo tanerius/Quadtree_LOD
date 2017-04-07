@@ -5,7 +5,7 @@
 #include "cgloader.hpp"
 #include "cgrenderer.hpp"
 #include "cgtexture.hpp"
-#include "cgtexturedmodel.hpp"
+//#include "cgtexturedmodel.hpp"
 
 int main()
 {
@@ -35,7 +35,7 @@ int main()
 
     CGCore::RawModel* ModelObj = LoaderObj->LoadToVAO(PossibleVertices, 12, Indices, 6);
     CGCore::Texture* TextureObj = new CGCore::Texture("../res/img_noalpha.png");
-    CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
+    //CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
 
     while(!Display->CloseRequested())
     {

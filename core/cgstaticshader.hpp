@@ -16,6 +16,7 @@ namespace CGCore
             virtual void BindAttributes() override;
         public:
             StaticShader();
+            virtual ~StaticShader() {}
     };
 
 }

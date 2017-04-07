@@ -9,15 +9,15 @@ namespace CGCore
     {
         private:
             GLuint VaoID;
-            int VertexCount;
+            GLuint VertexCount;
 
             // prevent default construction
             RawModel() {};
         public:
             RawModel(int PVaoID, int PVertexCount) : VaoID(PVaoID), VertexCount(PVertexCount) {}
 
-            inline int GetVaoID() { return VaoID; }
-            inline int GetVertexCount() { return VertexCount; }
+            inline GLuint GetVaoID() { return VaoID; }
+            inline GLuint GetVertexCount() { return VertexCount; }
             
     };
 

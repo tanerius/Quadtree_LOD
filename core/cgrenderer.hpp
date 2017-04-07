@@ -5,8 +5,8 @@
 
 namespace CGCore
 {
+    class RawModel;
 
-    class TexturedModel;
     // Renderer class 
     class Renderer
     {
@@ -14,7 +14,7 @@ namespace CGCore
 
         public:
             void Prepare();
-            void Render(CGCore::TexturedModel* Model);
+            void Render(CGCore::RawModel* Model);
     };
 
 } 
