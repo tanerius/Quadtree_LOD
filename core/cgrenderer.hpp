@@ -15,6 +15,7 @@ namespace CGCore
         public:
             void Prepare();
             void Render(CGCore::TexturedModel* TexturedModelObj);
+            void SetStates();
     };
 
 } 

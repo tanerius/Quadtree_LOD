@@ -33,35 +33,43 @@ void CGCore::DisplayManager::CreateDisplay()
     // Creating a display
     assert(GLFWWindowPtr == nullptr);
     // Initialize GLFW, and if it fails to initialize for any reason, print it out to STDERR.
-    if (!glfwInit()) 
-    {
-        WriteDisplay("Failed initialize GLFW.\n");
-        exit(EXIT_FAILURE);
-    }
+    // Initialise GLFW
+	if( !glfwInit() )
+	{
+		fprintf( stderr, "Failed to initialize GLFW\n" );
+		exit(EXIT_FAILURE);
+	}
+
     glfwSetErrorCallback(CGCallbacks::ErrorCallback);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    // Indicate we only want the newest core profile, rather than using backwards compatible and deprecated features.
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    // Make the window non resizeable.
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+    glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); // Try 4
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); // try 1
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     
     // Create a window to put our stuff in.
-    GLFWWindowPtr = glfwCreateWindow(DisplayWidth, DisplayHeight, "OpenGL", NULL, NULL);
+    GLFWWindowPtr = glfwCreateWindow(DisplayWidth, DisplayHeight, "Quadtree LOD", NULL, NULL);
 
-    // If the window fails to be created, clean up.
-    if(!GLFWWindowPtr) {
-        WriteDisplay("Failed to create GLFW window.\n");
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-    glfwMakeContextCurrent(GLFWWindowPtr);
+    if( GLFWWindowPtr == NULL ){
+		fprintf( stderr, "Failed to open GLFW window. If you have an Intel GPU, they are not 3.3 compatible. Try the 2.1 version of the tutorials.\n" );
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+	glfwMakeContextCurrent(GLFWWindowPtr);
+
     glfwSetKeyCallback(GLFWWindowPtr, CGCallbacks::KeyCallback); // key capture
 
-    // Init glew stuff
-    glewExperimental = GL_TRUE;
-    glewInit();
+    // Initialize GLEW
+	glewExperimental = GL_TRUE; // Needed for core profile
+	if (glewInit() != GLEW_OK) {
+		fprintf(stderr, "Failed to initialize GLEW\n");
+		exit(EXIT_FAILURE);
+	}
+    // Ensure we can capture the escape key being pressed below
+	glfwSetInputMode(GLFWWindowPtr, GLFW_STICKY_KEYS, GL_TRUE);
+
+    
 }
 
 void CGCore::DisplayManager::DestroyDisplay()
@@ -87,5 +95,5 @@ void CGCore::DisplayManager::UpdateDisplay()
 
 void CGCore::DisplayManager::WriteDisplay(const char* Msg)
 {
-    printf("Log (%lu b): %s", sizeof(GLfloat), Msg);
+    printf("Log: %s", Msg);
 }

@@ -23,14 +23,20 @@ namespace CGCore
             std::vector<GLuint> VBOContainer;
             std::vector<Texture*> TextureContainer;
             // Members
-            void BindIndicesBufferVBO(GLuint Indices[], GLuint ArraySize);
-            GLuint CreateVAO(); // returns a new VaoID
-            void StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize);
+            void BindIndicesBufferVBO(const GLuint Indices[], GLuint ArraySize);
+            void StoreDataInAttrList(GLuint AttrNumber, GLuint AttrSize, const GLfloat Data[], GLuint DataSize);
             void UnbindVAO();
         public:
             void CleanUp(); 
-            Texture* LoadTexture(const char* FileName);
-            RawModel* LoadToVAO(GLfloat Positions[], GLuint PosArrySize, GLuint Indices[], GLuint IndArrySize);
+            void CreateBindVAO(); // returcreates a new VAO and stores it in a contanier
+            RawModel* LoadToVAO
+                (
+                    const GLfloat Positions[], GLuint PosArrySize, 
+                    const GLuint Indices[], GLuint IndArrySize,
+                    const GLfloat TexCoords[], GLuint TCArrySize 
+                );
+            GLuint LoadToVBO(const GLfloat DataArray[], const GLuint DataSize);
+            GLuint LoadToVBO(const GLuint Indices[], const GLuint ArraySize);
     };
 
 } 

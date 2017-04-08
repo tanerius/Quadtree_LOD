@@ -11,4 +11,5 @@ CGCore::StaticShader::StaticShader() : Shader(CGCore::VERTEX_FILENAME, CGCore::F
 void CGCore::StaticShader::BindAttributes()
 {
     BindAttribute(0, "position");
+    BindAttribute(1, "textureCoords"); // sine vao1 ia now used it has to be enabled in the renderer
 }

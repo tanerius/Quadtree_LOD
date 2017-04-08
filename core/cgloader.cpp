@@ -15,13 +15,13 @@
 * VBO optimization to make sure repeating vectors don't use up space
 *
 */
-void CGCore::Loader::BindIndicesBufferVBO(GLuint Indices[], GLuint ArraySize)
+void CGCore::Loader::BindIndicesBufferVBO(const GLuint Indices[], GLuint ArraySize)
 {
     GLuint VboID; 
     glGenBuffers(1,&VboID);
     VBOContainer.push_back(VboID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboID);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLint)*ArraySize, Indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*ArraySize, Indices, GL_STATIC_DRAW);
 }
 
 void CGCore::Loader::CleanUp()
@@ -46,44 +46,61 @@ void CGCore::Loader::CleanUp()
     TextureContainer.clear();
 }
 
-GLuint CGCore::Loader::CreateVAO()
+void CGCore::Loader::CreateBindVAO()
 {
     GLuint VaoID;
     glGenVertexArrays(1, &VaoID); // create the VAO
     VAOContainer.push_back(VaoID);
     glBindVertexArray(VaoID); // bind the VAO
-    return VaoID;
 }
 
-CGCore::Texture* CGCore::Loader::LoadTexture(const char* FileName)
-{
-    CGCore::Texture* NewTexture = new CGCore::Texture(FileName);
-    TextureContainer.push_back(NewTexture);
-    return NewTexture;
-}
- 
 CGCore::RawModel* CGCore::Loader::LoadToVAO
 (
-    GLfloat Positions[], GLuint PosArrySize,
-    GLuint Indices[], GLuint IndArrySize
+    const GLfloat VertexData[], GLuint PosArrySize,
+    const GLuint Indices[], GLuint IndArrySize,
+    const GLfloat TextureUV[], GLuint TCArrySize
 )
 {
-    GLuint VaoID = CreateVAO();
     BindIndicesBufferVBO(Indices, IndArrySize); // Buffer Index - optimization
-    StoreDataInAttrList(0, Positions, PosArrySize);
+    StoreDataInAttrList(0, 3, VertexData, PosArrySize);
+    StoreDataInAttrList(1, 2, TextureUV, TCArrySize);
     UnbindVAO();
-    CGCore::RawModel* ret = new CGCore::RawModel(VaoID, IndArrySize);
+    CGCore::RawModel* ret = new CGCore::RawModel(VAOContainer[0], IndArrySize);
     return ret;
 }
 
-void CGCore::Loader::StoreDataInAttrList(GLuint AttrNumber, GLfloat Data[], GLuint DataSize)
+
+// Creates a VBO and loads it with data and returns the name
+GLuint CGCore::Loader::LoadToVBO(const GLfloat DataArray[], const GLuint DataSize)
+{
+    printf("Data Loader\n");
+    GLuint VboID; 
+    glGenBuffers(1,&VboID);
+    VBOContainer.push_back(VboID);
+    glBindBuffer(GL_ARRAY_BUFFER, VboID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*DataSize, DataArray, GL_STATIC_DRAW);
+    return VboID;
+}
+
+GLuint CGCore::Loader::LoadToVBO(const GLuint Indices[], const GLuint ArraySize)
+{
+    printf("Index Loader\n");
+    GLuint VboID; 
+    glGenBuffers(1,&VboID);
+    VBOContainer.push_back(VboID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*ArraySize, Indices, GL_STATIC_DRAW);
+    return VboID;
+}
+
+void CGCore::Loader::StoreDataInAttrList(GLuint AttrNumber, GLuint AttrSize, const GLfloat Data[], GLuint DataSize)
 {
     GLuint VboID; 
     glGenBuffers(1,&VboID);
     VBOContainer.push_back(VboID);
     glBindBuffer(GL_ARRAY_BUFFER, VboID);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*DataSize, Data, GL_STATIC_DRAW);
-    glVertexAttribPointer(AttrNumber, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0); // write to VAO
+    glVertexAttribPointer(AttrNumber, AttrSize, GL_FLOAT, GL_FALSE, 0, (void*) 0); // write to VAO
     glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind current VBO
 }
 

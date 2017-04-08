@@ -1,7 +1,6 @@
-#version 410
+#version 410 core
 
 in vec3 color;
-
 out vec4 out_color;
 
 void main(void)

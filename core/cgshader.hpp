@@ -11,17 +11,14 @@ namespace CGCore
     {
         private:
             GLuint ProgramID;
-            GLuint VertexShaderID;
-            GLuint FragmentShaderID;
-            std::vector <char*> VertShaderError;
-
             const char* ReadFile(const char *FileName);
         protected:
             virtual void BindAttributes() = 0; // PURE VIRTUAL !!!
-            virtual GLuint LoadShader(const char* FileName, GLenum ShaderType);
+            virtual GLuint LoadShaders(const char* VertexShader, const char* FramentShader);
         public:
             void BindAttribute(int Attrib, const GLchar* VarName);
             void CleanUp();
+            GLuint GetProgramID() const { return ProgramID; }
             Shader(const char* VertexFile, const char* FragmentFile);
             void StartProgram();
             void StopProgram();

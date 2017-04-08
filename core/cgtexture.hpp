@@ -9,24 +9,22 @@ namespace CGCore
     class Texture
     {
         private:
+            GLuint TextureID;
             int Height;
             int Width;
-            bool HasAlpha;
-            GLubyte* TextureData = nullptr;
+            bool IsLoadedCorrectly;
             
             Texture() {} // Can't be instatiated using default constructor'
-            bool LoadPNG(
-                    const char* name, int& outWidth, int& outHeight, bool& outHasAlpha, 
-                    GLubyte** outData 
-                ); // Load texture libpng 
+            void GenerateTexture(GLuint temp_width, GLuint temp_height, GLint format, GLubyte* image_data);
+            bool LoadPNG(const char* name); // Load texture libpng 
             void LoadTexture(const char* FileName);
         public:
             Texture(const char* PNGFileName); // Textures for now must be PNG
             ~Texture();
-            bool CheckHasAlpha() const { return HasAlpha; }
+            bool CheckIsLoaded() const { return IsLoadedCorrectly; }
             int GetHeight() const { return Height; }
+            GLuint GetTextureID() const { return TextureID; }
             int GetWidth() const { return Width; }
-            GLubyte* GetTexture() const { return TextureData; }
     };
 }
     

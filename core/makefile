@@ -18,13 +18,16 @@ COMPILER_FLAGS = -Wall -std=c++11
 
 # LINKER_FLAGS specifies the libraries we're linking against
 # Cocoa, IOKit, and CoreVideo are needed for static GLFW3.
-LINKER_FLAGS = -framework OpenGL -lglfw -lglew -lpng
+LINKER_FLAGS = -framework OpenGL -lglfw3 -lglew -lpng
 
 # OBJ_NAME specifies the name of our exectuable
 OBJ_NAME = cgdisplay
 
 #This is the target that compiles our executable
-all : clean $(OBJS)
+all : clean $(OBJS) standalone
+
+standalone : 
+	$(CC) tests_standalone.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/standalone 
 
 tests: cgdisplay rawmodel loader renderer shader staticshader texture texturedmodel
 	$(CC) tests.cpp $(INCLUDE_PATHS) $(LIBRARY_PATHS) $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $(OUTPUTDIR)/tests $(OUTPUTDIR)/cgdisplay.o $(OUTPUTDIR)/cgrawmodel.o $(OUTPUTDIR)/cgloader.o $(OUTPUTDIR)/cgrenderer.o $(OUTPUTDIR)/cgshader.o $(OUTPUTDIR)/cgstaticshader.o $(OUTPUTDIR)/cgtexture.o $(OUTPUTDIR)/cgtexturedmodel.o
@@ -52,6 +55,7 @@ shader : cgshader.hpp
 
 texture : cgtexture.hpp 
 	$(CC) cgtexture.cpp $(INCLUDE_PATHS) $(COMPILER_FLAGS) -c -o $(OUTPUTDIR)/cgtexture.o
+
 clean:
 	- rm -rf $(OUTPUTDIR)
 	- mkdir -p $(OUTPUTDIR)
