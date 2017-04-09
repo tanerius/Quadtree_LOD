@@ -1,4 +1,3 @@
-#include "cgtexturedmodel.hpp"
 #include "cgrenderer.hpp"
 #include "cgrawmodel.hpp"
 #include "cgtexture.hpp"
@@ -13,18 +12,9 @@ void CGCore::Renderer::Prepare()
     
 }
 
-void CGCore::Renderer::Render(CGCore::TexturedModel* TexturedModelObj)
+void CGCore::Renderer::Render()
 {
-    CGCore::RawModel* Model = TexturedModelObj->GetModel();
-    glBindVertexArray(Model->GetVaoID());
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glActiveTexture(GL_TEXTURE0);
-    glDrawElements(	GL_TRIANGLES, Model->GetVertexCount(), GL_UNSIGNED_INT, (void*) 0);
-    glBindTexture(GL_TEXTURE_2D, TexturedModelObj->GetTexture()->GetTextureID());
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-    glBindVertexArray(0);
+   // Main rendering code
 }
 
 void CGCore::Renderer::SetStates()

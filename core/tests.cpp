@@ -1,5 +1,4 @@
 #include "cgdisplay.hpp"
-#include "cgtexturedmodel.hpp"
 #include "cgrawmodel.hpp"
 #include "cgtexture.hpp"
 #include "cgshader.hpp"
@@ -53,9 +52,7 @@ int main()
     GLuint TriangleVertexBufferID = LoaderObj->LoadToVBO(VertexBufferData, 9);
     GLuint BufferIndex = LoaderObj->LoadToVBO(Indices, 9); // Should use the GLuint version
     GLuint TextureUV = LoaderObj->LoadToVBO(TextureCoords, 6);
-    // Generate a TexturedModel instance (makes no data modifications)
-    // CGCore::TexturedModel* TMObj = new CGCore::TexturedModel(ModelObj, TextureObj);
-
+    
     // Start main loop
     while(!Display->CloseRequested())
     {
@@ -92,6 +89,9 @@ int main()
 			0,                                // stride
 			(void*)0                          // array buffer offset
 		);
+
+        // Draw the triangle !
+		//glDrawArrays(GL_TRIANGLES, 0, 3*3); // 12*3 indices starting at 0 -> 12 triangles
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIndex);
         glDrawElements(	GL_TRIANGLES, 
