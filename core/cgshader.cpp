@@ -112,21 +112,20 @@ GLuint CGCore::Shader::LoadShaders(const char* VertexShader, const char* Frament
 
 
 const char* CGCore::Shader::ReadFile(const char *FileName) {
-    std::string content;
-    std::ifstream fileStream(FileName, std::ios::in);
+    // Read the Vertex Shader code from the file
+	std::string ShaderCode;
+	std::ifstream ShaderStream(FileName, std::ios::in);
+	if(ShaderStream.is_open()){
+		std::string Line = "";
+		while(getline(ShaderStream, Line))
+			ShaderCode += "\n" + Line;
+		ShaderStream.close();
+	}else{
+		printf("Impossible to open %s. Are you in the right directory ? \n", FileName);
+		getchar();
+		return "";
+	}
 
-    if(!fileStream.is_open()) {
-        std::cerr << "Could not read file " << FileName << ". File does not exist." << std::endl;
-        return "";
-    }
-
-    std::string line = "";
-    while(!fileStream.eof()) {
-        std::getline(fileStream, line);
-        content.append(line + "\n");
-    }
-
-    fileStream.close();
-
-    return content.c_str();
+    printf("Shader dump:\n%s\n\n",ShaderCode.c_str());
+    return ShaderCode.c_str();
 }

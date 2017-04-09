@@ -1,12 +1,12 @@
-#version 410 core
+#version 330 core
 
-in vec3 position;
-in vec2 textureCoords;
+layout (location = 0) in vec3 position;
+layout (location = 1) in vec2 textureCoords;
 
-out vec2 pass_textureCoords;
+out vec2 TexCoord;
 
-void main(void)
+void main()
 {
-    gl_Position = vec4(position.x, position.y, position.z, 1.0);
-    pass_textureCoords = textureCoords;
+    gl_Position = vec4(position, 1.0f);
+    TexCoord = textureCoords;
 }
