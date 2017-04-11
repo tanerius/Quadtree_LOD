@@ -27,7 +27,7 @@ int main()
     // Get handles for any uniform shader vars which we may need
     // GLuint SomeUniform = glGetUniformLocation(ProgramID, "VarName");
     // Load a texture
-    CGCore::Texture* TextureObj = new CGCore::Texture("../res/img_noalpha.png");
+    CGCore::Texture* TextureObj = new CGCore::Texture("../res/tex512.png");
     // Get a handle for the "textureSampler" uniform
 	GLuint TextureSamplerHnd  = glGetUniformLocation(ProgramID, "textureSampler");
     // Vertex data representing a triangle 

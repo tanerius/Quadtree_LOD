@@ -40,13 +40,12 @@ void CGCore::DisplayManager::CreateDisplay()
 		exit(EXIT_FAILURE);
 	}
 
-    glfwSetErrorCallback(CGCallbacks::ErrorCallback);
-
+#ifdef APPLE
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Try 4
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1); // try 1
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
+#endif
     
     // Create a window to put our stuff in.
     GLFWWindowPtr = glfwCreateWindow(DisplayWidth, DisplayHeight, "Quadtree LOD", NULL, NULL);
@@ -59,6 +58,7 @@ void CGCore::DisplayManager::CreateDisplay()
 	glfwMakeContextCurrent(GLFWWindowPtr);
 
     glfwSetKeyCallback(GLFWWindowPtr, CGCallbacks::KeyCallback); // key capture
+    glfwSetErrorCallback(CGCallbacks::ErrorCallback);
 
     // Initialize GLEW
 	glewExperimental = GL_TRUE; // Needed for core profile
@@ -84,6 +84,8 @@ void CGCore::DisplayManager::GetInfo()
     printf("GL Information:\n");
     printf("Supported GL version: %s \n",glGetString(GL_VERSION));
     printf("Supported shading lang: %s \n",glGetString (GL_SHADING_LANGUAGE_VERSION));
+    printf("Current GL vendor: %s \n",glGetString(GL_VENDOR));
+    printf("Current GL renderer: %s \n",glGetString(GL_RENDERER));
 }
 
 void CGCore::DisplayManager::UpdateDisplay()
