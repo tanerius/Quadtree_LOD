@@ -22,6 +22,9 @@
         "new": "cpp",
         "ostream": "cpp",
         "streambuf": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "iomanip": "cpp",
+        "cstdint": "cpp",
+        "type_traits": "cpp"
     }
 }

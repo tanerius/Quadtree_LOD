@@ -38,7 +38,7 @@ void CGCore::Loader::CleanUp()
     for(CGCore::Texture* n : TextureContainer)
     {
         delete n;
-        n = nullptr;
+        n = 0;
     }
     
     VBOContainer.clear();

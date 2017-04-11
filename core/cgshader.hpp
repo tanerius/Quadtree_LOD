@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <GL/glew.h>
-
+#define MAX_SHADER_LENGTH 262144
 namespace CGCore
 {
     // An abstract class representing a shader - can't be instantiated on its own
@@ -22,6 +22,8 @@ namespace CGCore
             Shader(const char* VertexFile, const char* FragmentFile);
             void StartProgram();
             void StopProgram();
+
+            bool parse_file_into_str ( const char* file_name, char* shader_str, int max_len);
 
     };
 }

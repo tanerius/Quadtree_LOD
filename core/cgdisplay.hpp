@@ -15,7 +15,7 @@ namespace CGCore
             const int DisplayHeight = 720;
             // const int MaxFps = 120;
 
-            GLFWwindow* GLFWWindowPtr = nullptr; // will hold our window pointer
+            GLFWwindow* GLFWWindowPtr = 0; // will hold our window pointer
 
         public:
             bool CloseRequested();

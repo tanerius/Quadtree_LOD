@@ -31,7 +31,7 @@ bool CGCore::DisplayManager::CloseRequested()
 void CGCore::DisplayManager::CreateDisplay()
 {
     // Creating a display
-    assert(GLFWWindowPtr == nullptr);
+    assert(GLFWWindowPtr == 0);
     // Initialize GLFW, and if it fails to initialize for any reason, print it out to STDERR.
     // Initialise GLFW
 	if( !glfwInit() )
@@ -42,11 +42,11 @@ void CGCore::DisplayManager::CreateDisplay()
 
     glfwSetErrorCallback(CGCallbacks::ErrorCallback);
 
-    glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4); // Try 4
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1); // try 1
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // To make MacOS happy; should not be needed
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    
     
     // Create a window to put our stuff in.
     GLFWWindowPtr = glfwCreateWindow(DisplayWidth, DisplayHeight, "Quadtree LOD", NULL, NULL);
