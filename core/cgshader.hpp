@@ -11,7 +11,7 @@ namespace CGCore
     {
         private:
             GLuint ProgramID;
-            const char* ReadFile(const char *FileName);
+            bool ReadFile ( const char* file_name, char* shader_str, int max_len);
         protected:
             virtual void BindAttributes() = 0; // PURE VIRTUAL !!!
             virtual GLuint LoadShaders(const char* VertexShader, const char* FramentShader);
@@ -23,7 +23,7 @@ namespace CGCore
             void StartProgram();
             void StopProgram();
 
-            bool parse_file_into_str ( const char* file_name, char* shader_str, int max_len);
+            
 
     };
 }

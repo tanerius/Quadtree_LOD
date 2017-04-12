@@ -42,23 +42,23 @@ void CGCore::Shader::StopProgram()
 
 GLuint CGCore::Shader::LoadShaders(const char* VertexShader, const char* FramentShader)
 {
+	// If something fails here stop
+	bool HasFailed = false;
+	GLint Result = GL_FALSE;
+	int InfoLogLength;
+
     // Create the shaders
+
+	// Vertex shader
 	GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-
 	char VertexSource[MAX_SHADER_LENGTH];
-	parse_file_into_str (VertexShader, VertexSource, MAX_SHADER_LENGTH);
-	char FragmentSource[MAX_SHADER_LENGTH];
-	parse_file_into_str (FramentShader, FragmentSource, MAX_SHADER_LENGTH);
-
+	HasFailed = !ReadFile (VertexShader, VertexSource, MAX_SHADER_LENGTH);
+	if (HasFailed) {
+		printf("Could not open vshader file: %s\n", VertexShader);
+		exit(EXIT_FAILURE); 
+	}
 	// Read the Vertex Shader code from the file
     const GLchar* VertexSourcePointer = (const GLchar*) VertexSource;
-    const GLchar* FragmentSourcePointer = (const GLchar*) FragmentSource;
-
-    GLint Result = GL_FALSE;
-	int InfoLogLength;
-    bool HasFailed = false;
-
     // Compile Vertex Shader
 	printf("Compiling shader : %s\n", VertexShader);
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
@@ -74,6 +74,15 @@ GLuint CGCore::Shader::LoadShaders(const char* VertexShader, const char* Frament
         HasFailed = true;
 	}
 
+	// Fragment shader
+	GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+	char FragmentSource[MAX_SHADER_LENGTH];
+	HasFailed = !ReadFile (FramentShader, FragmentSource, MAX_SHADER_LENGTH);
+	if (HasFailed) {
+		printf("Could not open fshader file: %s\n", FramentShader);
+		exit(EXIT_FAILURE); 
+	}
+	const GLchar* FragmentSourcePointer = (const GLchar*) FragmentSource;
     // Compile Fragment Shader
 	printf("Compiling shader : %s\n", FramentShader);
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
@@ -106,6 +115,7 @@ GLuint CGCore::Shader::LoadShaders(const char* VertexShader, const char* Frament
         HasFailed = true;
 	}
 
+	// Clean up
     glDetachShader(ProgramID, VertexShaderID);
 	glDetachShader(ProgramID, FragmentShaderID);
 	
@@ -118,30 +128,7 @@ GLuint CGCore::Shader::LoadShaders(const char* VertexShader, const char* Frament
 }
 
 
-const char* CGCore::Shader::ReadFile(const char *FileName) {
-    std::ifstream file;
-	std::string filePath = FileName;
-	file.open((filePath).c_str());
-	std::string output;
-	std::string line;
- 
-	if(!file.is_open())
-	{
-		std::cerr << " Enable to load shader: "<<filePath<<"...!!"<<std::endl;
-		exit (EXIT_FAILURE);
-	}
- 
-	while(file.good())
-	{
-		getline(file,line);
-		output.append(line + "\n");
-	}
- 
-	file.close();
-	return output.c_str();
-}
-
-bool CGCore::Shader::parse_file_into_str ( const char* file_name, char* shader_str, int max_len) 
+bool CGCore::Shader::ReadFile ( const char* file_name, char* shader_str, int max_len) 
 {
 	shader_str[0] = '\0'; // reset string
 	FILE* file = fopen (file_name , "r");

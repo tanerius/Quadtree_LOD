@@ -19,7 +19,6 @@ int main()
     RendererObj->SetStates();
     // Get a loader instance
     CGCore::Loader* LoaderObj = new CGCore::Loader();
-    LoaderObj->CreateBindVAO();
     // Load relevant shaders
     CGCore::StaticShader* StaticShaderObj = new CGCore::StaticShader(); // generates ProgramID too
     // Get a ProgramID just in case
@@ -48,7 +47,8 @@ int main()
         1.0f, 0.0f  // v3
     };
 
-    // Generate and load buffers
+    LoaderObj->CreateBindVAO();
+    // Generate and load buffers (VBOs)
     GLuint TriangleVertexBufferID = LoaderObj->LoadToVBO(VertexBufferData, 9);
     GLuint BufferIndex = LoaderObj->LoadToVBO(Indices, 9); // Should use the GLuint version
     GLuint TextureUV = LoaderObj->LoadToVBO(TextureCoords, 6);
@@ -59,13 +59,9 @@ int main()
         RendererObj->Prepare();
         StaticShaderObj->StartProgram();
         //RendererObj->Render(TMObj);
-
         // Bind our texture in Texture Unit 0
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, TextureObj->GetTextureID());
-		// Set our "textureSampler" sampler to user Texture Unit 0
-		glUniform1i(TextureSamplerHnd, 0);
-
+        TextureObj->ApplyTexture(TextureSamplerHnd, 0);
+		
         // 1rst attribute buffer : vertices
 		glEnableVertexAttribArray(0);
 		glBindBuffer(GL_ARRAY_BUFFER, TriangleVertexBufferID);

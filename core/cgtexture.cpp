@@ -1,20 +1,33 @@
 #include "cgtexture.hpp"
 #include <cstdlib>
 #include <cstring>
+
+// Apple only definition
+#ifdef APPLE
 #include <png.h> // Ability to read png files for textures
+#endif
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 CGCore::Texture::Texture(const char* PNGFileName)
 {
     IsLoadedCorrectly = false;
-    LoadTexture(PNGFileName);
+    LoadTextureFile(PNGFileName);
 }
 
 // Dtor
 CGCore::Texture::~Texture()
 {
     if (IsLoadedCorrectly) glDeleteTextures(1, &TextureID);
+}
+
+void CGCore::Texture::ApplyTexture(GLuint TextureSamplerHnd, int TextureUnit){
+    // Bind our texture in Texture Unit 0
+    glActiveTexture(GL_TEXTURE0 + TextureUnit);
+    glBindTexture(GL_TEXTURE_2D, TextureID);
+    // Set our "textureSampler" sampler to user Texture Unit 0
+    glUniform1i(TextureSamplerHnd, 0);
 }
 
 void CGCore::Texture::GenerateTexture(GLuint temp_width, GLuint temp_height, GLint format, GLubyte* image_data)
@@ -44,7 +57,7 @@ void CGCore::Texture::GenerateTexture(GLuint temp_width, GLuint temp_height, GLi
     );
 }
 
-bool CGCore::Texture::LoadPNG(const char* file_name)
+bool CGCore::Texture::LoadPNGFile(const char* file_name)
 {
     png_byte header[8];
 
@@ -118,8 +131,9 @@ bool CGCore::Texture::LoadPNG(const char* file_name)
     png_get_IHDR(png_ptr, info_ptr, &temp_width, &temp_height, &bit_depth, &color_type,
         NULL, NULL, NULL);
 
-    Width = temp_width;
-    Height = temp_height;
+    // No need to store the data now enable if needed
+    //Width = temp_width;
+    //Height = temp_height;
     
     //printf("%s: %lux%lu %d\n", file_name, temp_width, temp_height, color_type);
 
@@ -194,8 +208,8 @@ bool CGCore::Texture::LoadPNG(const char* file_name)
 }
 
 
-void CGCore::Texture::LoadTexture(const char* FileName)
+void CGCore::Texture::LoadTextureFile(const char* FileName)
 {
-    IsLoadedCorrectly = LoadPNG(FileName);
+    IsLoadedCorrectly = LoadPNGFile(FileName);
     if (!IsLoadedCorrectly) printf("Did not load texture corrently!!!\n");
 }

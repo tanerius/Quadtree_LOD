@@ -73,7 +73,7 @@ CGCore::RawModel* CGCore::Loader::LoadToVAO
 // Creates a VBO and loads it with data and returns the name
 GLuint CGCore::Loader::LoadToVBO(const GLfloat DataArray[], const GLuint DataSize)
 {
-    printf("Data Loader\n");
+    //printf("Data Loader\n");
     GLuint VboID; 
     glGenBuffers(1,&VboID);
     VBOContainer.push_back(VboID);
@@ -84,7 +84,7 @@ GLuint CGCore::Loader::LoadToVBO(const GLfloat DataArray[], const GLuint DataSiz
 
 GLuint CGCore::Loader::LoadToVBO(const GLuint Indices[], const GLuint ArraySize)
 {
-    printf("Index Loader\n");
+    // printf("Index Loader\n");
     GLuint VboID; 
     glGenBuffers(1,&VboID);
     VBOContainer.push_back(VboID);
